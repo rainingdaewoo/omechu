@@ -1,10 +1,12 @@
 package omechu.omechubackend.request;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Setter
+@ToString
 public class PostCreate {
 
     @NotBlank(message = "타이틀을 입력해주세요.")
@@ -12,4 +14,13 @@ public class PostCreate {
 
     @NotBlank(message = "콘텐츠를 입력해주세요.")
     private String content;
+
+    public PostCreate() {
+    }
+
+    @Builder
+    public PostCreate(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
