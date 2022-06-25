@@ -3,6 +3,7 @@ package omechu.omechubackend.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import omechu.omechubackend.entity.Post;
+import omechu.omechubackend.exception.InvalidRequest;
 import omechu.omechubackend.request.PostCreate;
 import omechu.omechubackend.request.PostEdit;
 import omechu.omechubackend.request.PostSearch;
@@ -27,6 +28,8 @@ public class PostController {
      */
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request) {
+        request.validate();
+
         postService.write(request);
     }
 
@@ -61,6 +64,10 @@ public class PostController {
         // 업데이트 후 데이터를 프론트에 넘겨줘야 하는지
     }
 
+    /**
+     * 게시글 삭제
+     * @param postId
+     */
     @DeleteMapping("/posts/{postId}")
     public void delete(@PathVariable Long postId) {
         postService.delete(postId);

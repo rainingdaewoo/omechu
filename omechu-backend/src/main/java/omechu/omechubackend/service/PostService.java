@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import omechu.omechubackend.entity.Post;
 import omechu.omechubackend.entity.PostEditor;
+import omechu.omechubackend.exception.PostNotFound;
 import omechu.omechubackend.repository.PostRepository;
 import omechu.omechubackend.request.PostCreate;
 import omechu.omechubackend.request.PostEdit;
@@ -25,9 +26,11 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-
+    /**
+     * 게시글 작성
+     * @param postCreate
+     */
     public void write(PostCreate postCreate) {
-
         Post post = Post.builder()
                 .title(postCreate.getTitle())
                 .content(postCreate.getContent())
@@ -36,9 +39,14 @@ public class PostService {
         postRepository.save(post);
     }
 
+    /**
+     * 게시글 1개 읽기
+     * @param id
+     * @return
+     */
     public PostResponse get(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(PostNotFound::new);
 
         return PostResponse.builder()
                 .id(post.getId())
@@ -47,6 +55,11 @@ public class PostService {
                 .build();
     }
 
+    /**
+     * 게시글 여러 개 읽기 - 페이징 처리 포함
+     * @param postSearch
+     * @return
+     */
     public List<PostResponse> getList(PostSearch postSearch) {
 
         //Pageable pageable = PageRequest.of(page, 5, Sort.Direction.DESC, ("id"));
@@ -56,10 +69,15 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 게시글 수정
+     * @param id
+     * @param postEdit
+     */
     @Transactional
     public void edit(Long id, PostEdit postEdit) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(PostNotFound::new);
 
         PostEditor.PostEditorBuilder editorBuilder = post.toEditor();
 
@@ -70,9 +88,13 @@ public class PostService {
         post.edit(postEditor);
     }
 
+    /**
+     * 게시글 삭제
+     * @param id
+     */
     public void delete(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(PostNotFound::new);
 
         postRepository.delete(post);
     }

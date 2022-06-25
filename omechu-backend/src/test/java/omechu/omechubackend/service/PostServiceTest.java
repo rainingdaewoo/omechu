@@ -1,6 +1,7 @@
 package omechu.omechubackend.service;
 
 import omechu.omechubackend.entity.Post;
+import omechu.omechubackend.exception.PostNotFound;
 import omechu.omechubackend.repository.PostRepository;
 import omechu.omechubackend.request.PostCreate;
 import omechu.omechubackend.request.PostEdit;
@@ -167,5 +168,60 @@ class PostServiceTest {
 
         //then
         assertEquals(0, postRepository.count());
+    }
+
+    @Test
+    @DisplayName("글 1개 조회 - 존재하지 않는 글(실패 처리 확인)")
+    void test7() {
+        // given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+        postRepository.save(post);
+
+        // expected
+        Assertions.assertThrows(PostNotFound.class, () -> {
+            postService.get(post.getId() + 1L);
+        });
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 - 존재하지 않는 글(실패 처리 확인) ")
+    void test8() {
+        // given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+
+        postRepository.save(post);
+
+        // expected
+        Assertions.assertThrows(PostNotFound.class, () -> {
+            postService.delete(post.getId() + 1L);
+        });
+    }
+
+    @Test
+    @DisplayName("글 내용 수정 - 존재하지 않는 글(실패 처리 확인)")
+    void test9() {
+        // given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("호돌맨")
+                .content("초가집")
+                .build();
+
+        // expected
+        Assertions.assertThrows(PostNotFound.class, () -> {
+            postService.edit(post.getId() + 1L, postEdit);
+        });
     }
 }
