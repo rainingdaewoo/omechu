@@ -3,12 +3,17 @@ package omechu.omechubackend.service;
 import omechu.omechubackend.entity.Post;
 import omechu.omechubackend.repository.PostRepository;
 import omechu.omechubackend.request.PostCreate;
+import omechu.omechubackend.request.PostEdit;
+import omechu.omechubackend.request.PostSearch;
 import omechu.omechubackend.response.PostResponse;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,11 +90,82 @@ class PostServiceTest {
 
         postRepository.saveAll(requestPosts);
 
+        PostSearch postSearch = PostSearch.builder()
+                                            .page(1)
+                                            .build();
         // when
-        List<PostResponse> posts = postService.getList(0);
+        List<PostResponse> posts = postService.getList(postSearch);
 
         // then
-        assertEquals(5L, posts.size());
+        assertEquals(10L, posts.size());
         assertEquals("호돌맨 제목 - 29", posts.get(0).getTitle());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test4() {
+        // given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("호돌걸")
+                .content("반포자이")
+                .build();
+        // when
+        postService.edit(post.getId(), postEdit);
+
+        // then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 글입니다... id= " + post.getId()));
+        assertEquals("호돌걸", changedPost.getTitle());
+        assertEquals("반포자이", changedPost.getContent());
+    }
+
+    @Test
+    @DisplayName("글 내용 수정")
+    void test5() {
+        // given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("호돌맨")
+                .content("초가집")
+                .build();
+        // when
+        postService.edit(post.getId(), postEdit);
+
+        // then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 글입니다... id= " + post.getId()));
+        assertEquals("호돌맨", changedPost.getTitle());
+        assertEquals("초가집", changedPost.getContent());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void test6() {
+        // given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+
+        postRepository.save(post);
+
+        // when
+        postService.delete(post.getId());
+
+        //then
+        assertEquals(0, postRepository.count());
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import omechu.omechubackend.entity.Post;
 import omechu.omechubackend.repository.PostRepository;
 import omechu.omechubackend.request.PostCreate;
+import omechu.omechubackend.request.PostEdit;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +22,7 @@ import java.util.stream.IntStream;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -158,11 +158,88 @@ class PostControllerTest {
         postRepository.saveAll(requestPosts);
 
         // expected (when + then 비슷한 의미)
-        mockMvc.perform(get("/posts?page=0")
+        mockMvc.perform(get("/posts?page=1&size=10")
+                        .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(10)))
+                .andExpect(jsonPath("$[0].title").value("호돌맨 제목 - 29"))
+                .andDo(print());
+
+    }
+
+    @Test
+    @DisplayName("페이지 번호를 0으로 요청하면 첫 페이지를 가져온다")
+    void test6() throws Exception {
+        // given
+        List<Post> requestPosts = IntStream.range(0, 30)
+                .mapToObj(i -> {
+                    return Post.builder()
+                            .title("호돌맨 제목 - " + i)
+                            .content("능동로 " + i + "길 " + (i * Math.random()) )
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        postRepository.saveAll(requestPosts);
+
+        // expected (when + then 비슷한 의미)
+        mockMvc.perform(get("/posts?page=0&size=10")
+                        .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(10)))
+                .andExpect(jsonPath("$[0].title").value("호돌맨 제목 - 29"))
+                .andDo(print());
+
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test7() throws Exception {
+        // given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("호돌걸")
+                .content("반포자이")
+                .build();
+
+        // expected (when + then 비슷한 의미)
+        mockMvc.perform(patch("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postEdit))
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void test8() throws Exception {
+        // given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+
+        postRepository.save(post);
+
+
+        // expected (when + then 비슷한 의미)
+        mockMvc.perform(delete("/posts/{postId}", post.getId())
                         .contentType(APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andDo(print());
 
     }
+
+
 }

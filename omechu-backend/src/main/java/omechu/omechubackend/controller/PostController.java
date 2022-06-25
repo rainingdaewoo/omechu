@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import omechu.omechubackend.entity.Post;
 import omechu.omechubackend.request.PostCreate;
+import omechu.omechubackend.request.PostEdit;
+import omechu.omechubackend.request.PostSearch;
 import omechu.omechubackend.response.PostResponse;
 import omechu.omechubackend.service.PostService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,8 +40,29 @@ public class PostController {
         return postService.get(postId);
     }
 
+    /**
+     * 게시글 리스트 조회
+     * @param postSearch
+     * @return
+     */
     @GetMapping("/posts")
-    public List<PostResponse> getList(@RequestParam int page) {
-        return postService.getList(page);
+    public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
+        return postService.getList(postSearch);
+    }
+
+    /**
+     * 게시글 수정
+     * @param postId
+     * @param request
+     */
+    @PatchMapping("/posts/{postId}")
+    public void edit(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
+        postService.edit(postId, request);
+        // 업데이트 후 데이터를 프론트에 넘겨줘야 하는지
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public void delete(@PathVariable Long postId) {
+        postService.delete(postId);
     }
 }
