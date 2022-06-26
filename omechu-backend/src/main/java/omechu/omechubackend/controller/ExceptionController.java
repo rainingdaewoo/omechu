@@ -32,12 +32,14 @@ public class ExceptionController {
     @ResponseBody
     public ErrorResponse invalidRequestHandler(MethodArgumentNotValidException e) {
         System.out.println("============================");
-        log.info(String.valueOf(e));
+        Map<String, String> validationInitialValue = new HashMap<>();
         // MethodArgumentNotValidException
         ErrorResponse response = ErrorResponse.builder()
                 .code("400")
                 .message("잘못된 요청입니다.")
+                .validation(validationInitialValue)
                 .build();
+
 
         for (FieldError fieldError : e.getFieldErrors() ) {
             response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
