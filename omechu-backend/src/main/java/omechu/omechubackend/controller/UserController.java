@@ -15,25 +15,21 @@ public class UserController {
 
     // security(라이브러리 적용) - CORS 정책을 가지고 있음. (시큐리티가 CORS를 해제해야함)
     // BookController 진입 직전
-    @CrossOrigin
     @PostMapping("/user")
     public ResponseEntity<?> saveUser(@RequestBody User user){
         return new ResponseEntity<>(userService.saveUser(user), HttpStatus.CREATED ); // 201
     }
 
-    @CrossOrigin
     @GetMapping("/user")
     public ResponseEntity<?> findAllUsers(){
         return new ResponseEntity<>(userService.findAllUsers(), HttpStatus.OK); // 200
     }
 
-    @CrossOrigin
     @GetMapping("/user/{id}")
     public ResponseEntity<?> findUser(@PathVariable Long id){
         return new ResponseEntity<>(userService.findUser(id), HttpStatus.OK); // 200
     }
 
-    @CrossOrigin
     @PutMapping("/user/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user){
         return new ResponseEntity<>(userService.updateUser(id, user), HttpStatus.OK); // 200
