@@ -13,7 +13,6 @@ public class UserController {
 
     private final UserService userService;
 
-    // security(라이브러리 적용) - CORS 정책을 가지고 있음. (시큐리티가 CORS를 해제해야함)
     // BookController 진입 직전
     @PostMapping("/user")
     public ResponseEntity<?> saveUser(@RequestBody User user){
@@ -34,6 +33,8 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user){
         return new ResponseEntity<>(userService.updateUser(id, user), HttpStatus.OK); // 200
     }
+
+
     /*@CrossOrigin
     @DeleteMapping("/book/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id){

@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import omechu.omechubackend.entity.User;
 import omechu.omechubackend.entity.RoleType;
 import omechu.omechubackend.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -16,6 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
      * 회원 가입
@@ -35,11 +38,7 @@ public class UserService {
      * 중복 회원 검증
      */
     private void validateDuplicateUser(User user) {
-        // 예외 처리
-        List<User> findUser = userRepository.findByUsername(user.getUsername());
-        if( !findUser.isEmpty() ) {
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
-        }
+
     }
 
     /**
