@@ -59,6 +59,16 @@ const LoginForm = () => {
                     로그인
                 </Button>
             </Form>
+            <br />
+            <Button href='http://localhost:8080/oauth2/authorization/kakao'>
+                카카오톡 로그인하기
+            </Button>    
+
+            <Button>
+                <a>
+                 <img src="/kakao_login_medium_narrow.png" />
+                </a>
+            </Button>
         </div>
     );
 };

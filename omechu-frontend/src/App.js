@@ -8,6 +8,7 @@ import Home from './pages/book/Home';
 import UpdateForm from './pages/book/UpdateForm';
 import JoinForm from './pages/user/JoinForm';
 import LoginForm from './pages/user/LoginForm';
+import KakaoLoginRedirect from './pages/user/KakaoLoginRedirect';
 
 function App() {
   return (
@@ -21,6 +22,10 @@ function App() {
           <Route path="/loginForm" element={<LoginForm />} />
           <Route path="/joinForm" element={<JoinForm />} />
           <Route path="/updateForm/:id" element={<UpdateForm />} />
+          <Route
+            path="/oauth2/redirect/:token"
+            element={<KakaoLoginRedirect />}
+          />
         </Routes>
       </Container>    
   </div>

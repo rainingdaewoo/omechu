@@ -22,10 +22,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-        logger.info("onAuthenticationSuccess 넘어오는 거 확인");
-        logger.info("authentication.getPrincipal()" + authentication.getPrincipal());
-
-
         // login 성공한 사용자 목록.
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
