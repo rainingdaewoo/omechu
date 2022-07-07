@@ -1,8 +1,11 @@
 package omechu.omechubackend.config.Oauth2;
 
 import omechu.omechubackend.config.jwt.JwtTokenUtil;
+import omechu.omechubackend.entity.User;
+import omechu.omechubackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -19,6 +22,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
@@ -27,9 +33,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         Map<String, Object> kakao_account = (Map<String, Object>) oAuth2User.getAttributes().get("kakao_account");
         String email = (String) kakao_account.get("email");
+
+        User user = userRepository.findByEmail(email);
+
         Map<String, Object> properties = (Map<String, Object>) oAuth2User.getAttributes().get("properties");
         String nickname = (String) properties.get("nickname");
-        String jwt = jwtTokenUtil.generateTokenForOAuth("kakao", email, nickname);
+        String jwt = jwtTokenUtil.generateTokenForOAuth(user.getUsername(), email, nickname);
 
         String url = makeRedirectUrl(jwt);
         System.out.println("url: " + url);

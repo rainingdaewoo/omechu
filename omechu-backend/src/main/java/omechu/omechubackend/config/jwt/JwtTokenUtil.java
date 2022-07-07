@@ -19,7 +19,8 @@ public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -2550185165626007488L;
 
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    //public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 60 * 60;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -58,7 +59,10 @@ public class JwtTokenUtil implements Serializable {
 
     //Jwt 발급.
     private String doGenerateToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
@@ -69,8 +73,12 @@ public class JwtTokenUtil implements Serializable {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    public String generateTokenForOAuth(String kakao, String email, String nickname) {
+    public String generateTokenForOAuth(String username, String email, String nickname) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, email);
+        claims.put("username", username);
+        claims.put("email", email);
+        claims.put("nickname", nickname);
+
+        return doGenerateToken(claims, username);
     }
 }

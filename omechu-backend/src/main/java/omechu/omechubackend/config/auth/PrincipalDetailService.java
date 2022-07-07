@@ -1,5 +1,6 @@
 package omechu.omechubackend.config.auth;
 
+import lombok.extern.slf4j.Slf4j;
 import omechu.omechubackend.entity.User;
 import omechu.omechubackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
+@Slf4j
 public class PrincipalDetailService implements UserDetailsService {
 
     @Autowired
@@ -25,6 +27,7 @@ public class PrincipalDetailService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("username:" + username);
         User userEntity = userRepository.findByUsername(username);
 
         return new PrincipalDetail(userEntity);

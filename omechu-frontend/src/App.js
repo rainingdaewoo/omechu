@@ -9,10 +9,11 @@ import UpdateForm from './pages/book/UpdateForm';
 import JoinForm from './pages/user/JoinForm';
 import LoginForm from './pages/user/LoginForm';
 import KakaoLoginRedirect from './pages/user/KakaoLoginRedirect';
+import Footer from './components/Footer';
 
 function App() {
   return (
-  <div>
+    <div>
     <Header />
      <Container>
         <Routes>
@@ -27,7 +28,8 @@ function App() {
             element={<KakaoLoginRedirect />}
           />
         </Routes>
-      </Container>    
+      </Container>  
+    <Footer />    
   </div>
   );
 };

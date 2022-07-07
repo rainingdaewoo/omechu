@@ -13,14 +13,9 @@ public class UserController {
 
     private final UserService userService;
 
-    // BookController 진입 직전
-    @PostMapping("/user")
-    public ResponseEntity<?> saveUser(@RequestBody User user){
-        return new ResponseEntity<>(userService.saveUser(user), HttpStatus.CREATED ); // 201
-    }
-
     @GetMapping("/user")
     public ResponseEntity<?> findAllUsers(){
+        System.out.println("컨트롤러 진입 확인");
         return new ResponseEntity<>(userService.findAllUsers(), HttpStatus.OK); // 200
     }
 

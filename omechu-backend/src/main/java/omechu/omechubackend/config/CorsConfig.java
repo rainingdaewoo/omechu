@@ -20,11 +20,16 @@ public class CorsConfig {
         config.addAllowedHeader("*");                           // 모든 header 응답 허용
         config.addAllowedMethod("*");       */                    // 모든 method 허용 -> post, get, put, delete, patch 등
 
-        config.addAllowedOriginPattern("*");
+        //config.addAllowedOriginPattern("*");
+
+        config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
-        config.setAllowCredentials(false);
+        config.setAllowCredentials(true);
+
+        config.addExposedHeader("Authorization");
+        config.addExposedHeader("refreshToken");
 
         source.registerCorsConfiguration("/**", config);
 

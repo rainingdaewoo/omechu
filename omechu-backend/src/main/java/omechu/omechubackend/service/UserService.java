@@ -18,29 +18,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    /**
-     * 회원 가입
-     */
-    @Transactional
-    public User saveUser(User user) {
-
-        System.out.println("체크체크");
-        validateDuplicateUser(user);
-
-        System.out.println("체크체크체크");
-        user.setRole(RoleType.ROLE_USER); // USER로 DEFAULT
-        return userRepository.save(user);
-    }
-
-    /**
-     * 중복 회원 검증
-     */
-    private void validateDuplicateUser(User user) {
-
-    }
-
     /**
      * 회원 전체 조회
      */

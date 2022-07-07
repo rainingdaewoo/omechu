@@ -2,9 +2,9 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const MemberItem = (props) => {
-    console.log( props.member);
-    const {id, username, email } = props.member;
+const UserItem = (props) => {
+    console.log( props.user);
+    const {id, username, email } = props.user;
 
     return (
         <Card>
@@ -12,7 +12,7 @@ const MemberItem = (props) => {
                 <Card.Title>{username}</Card.Title>
                 이메일: {email}
                 <br/>
-                <Link to={"/book/" + id} className="btn btn-primary">
+                <Link to={"/user/" + id} className="btn btn-primary">
                     상세보기
                 </Link>
             </Card.Body>
@@ -20,4 +20,4 @@ const MemberItem = (props) => {
     );
 };
 
-export default MemberItem;
+export default UserItem;
