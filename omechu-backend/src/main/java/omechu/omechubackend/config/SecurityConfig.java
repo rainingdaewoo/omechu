@@ -42,7 +42,7 @@ public class SecurityConfig {
     @Autowired
     private JwtRequestFilter JwtRequestFilter;
 
-    @Bean
+    /*@Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.apply(new MyCustomDsl())
@@ -65,6 +65,35 @@ public class SecurityConfig {
                     .successHandler(oAuth2AuthenticationSuccessHandler)
                     .userInfoEndpoint()
                     .userService(principalOauth2UserService);
+
+        http.addFilterBefore(JwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+
+    }*/
+
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        http.apply(new MyCustomDsl())
+                .and()
+                .formLogin().disable()                  // 폼로그인 해제
+                .httpBasic().disable()                  // http basic 해제
+                .authorizeRequests(authroize -> authroize.antMatchers("/api/user/**")
+                        .access("hasRole('ROLE_USER') or hasRole('ROLE_YOUTUBER') or hasRole('ROLE_ADMIN')")
+                        .antMatchers("/api/youtuber/**")
+                        .access("hasRole('ROLE_ADMIN') or hasRole('ROLE_YOUTUBER')")
+                        .antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
+                        .anyRequest().authenticated())
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // 세션 사용 X
+                .and()
+                .oauth2Login().defaultSuccessUrl("/login-success")
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService);
 
         http.addFilterBefore(JwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 

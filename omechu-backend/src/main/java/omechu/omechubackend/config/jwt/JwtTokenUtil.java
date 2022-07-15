@@ -4,6 +4,8 @@ import com.nimbusds.jwt.JWT;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import omechu.omechubackend.config.auth.PrincipalDetail;
+import omechu.omechubackend.entity.RoleType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -57,6 +59,22 @@ public class JwtTokenUtil implements Serializable {
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
+    public String generateToken(PrincipalDetail principalDetail) {
+        Map<String, Object> claims = new HashMap<>();
+
+        return doGenerateToken(claims, principalDetail.getUsername());
+    }
+
+    public String generateTokenForOAuth(String username, String email, String nickname, RoleType roleType) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", username);
+        claims.put("email", email);
+        claims.put("nickname", nickname);
+        claims.put("roleType", roleType);
+
+        return doGenerateToken(claims, username);
+    }
+
     //Jwt 발급.
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
@@ -71,14 +89,5 @@ public class JwtTokenUtil implements Serializable {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-    }
-
-    public String generateTokenForOAuth(String username, String email, String nickname) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("username", username);
-        claims.put("email", email);
-        claims.put("nickname", nickname);
-
-        return doGenerateToken(claims, username);
     }
 }

@@ -8,7 +8,7 @@ const Home = () => {
     // 함수 실행 시 최초 한번 실행되는 것
     useEffect(() => {
         //console.log("teste4st", localStorage.getItem("token"));
-        fetch("http://localhost:8080/api/user", {
+        fetch("http://localhost:8080/user", {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
                 "Content-Type": "application/json; charset=utf-8",

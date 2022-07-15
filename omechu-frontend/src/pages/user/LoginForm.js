@@ -1,74 +1,21 @@
-import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React, { useEffect } from 'react';
 
 const LoginForm = () => {
-    const [user, setUser] = useState({
-        email: "",
-        password: ""
-    });
 
-    const changeValue = (e) => {
-        setUser({
-            ...user,
-            [e.target.name]: e.target.value
-        });
-
-    }
-
-    const submitUser = (e) => {
-        e.preventDefault(); //submit이 action을 안 타고 자기 할일을 그만함.
-        fetch("http://localhost:8080/user", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8"
-            },
-            body: JSON.stringify(user)
-        })
-            .then( res => {
-                console.log(1, res);
-                if( res.status === 201){
-                    return res.json();     
-                } else {
-                   return null;
-                }
-            })
-            .then( res => {
-                if( res !== null ){
-                    window.location.href = "/";
-                } else {
-                    alert("로그인에 실패하였습니다");
-                }
-        }).catch( (error) => {
-            console.log(error);
-        });
-    }
+    useEffect(() => {
+       // 현재 회원이 로그인된 상태인지 확인
+       // 만약 로그인 되어있다면 메인 페이지로 이동.
+      }, []);
 
     return (
         <div>
-            <h1>로그인 창</h1>
-            <Form onSubmit={submitUser}>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>아이디</Form.Label>
-                    <Form.Control  type="email" placeholder="이메일을 적어주세요" onChange={changeValue} name="email"/>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" onChange={changeValue} name="password"/>
-                </Form.Group>
-                <Button variant="primary" type="submit">
-                    로그인
-                </Button>
-            </Form>
-            <br />
-            <Button href='http://localhost:8080/oauth2/authorization/kakao'>
-                카카오톡 로그인하기
-            </Button>    
-
-            <Button>
-                <a>
-                 <img src="/kakao_login_medium_narrow.png" />
-                </a>
-            </Button>
+            <h1>카카오 로그인으로 이용이 가능합니다!! :)</h1>
+            <a href="http://localhost:8080/oauth2/authorization/kakao">
+                <img 
+                    src="/kakao_login_medium_narrow.png" 
+                    alt="kakaoLogin" 
+                    />
+            </a>
         </div>
     );
 };

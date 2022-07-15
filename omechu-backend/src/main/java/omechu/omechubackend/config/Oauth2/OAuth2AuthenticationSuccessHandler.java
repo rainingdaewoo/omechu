@@ -38,7 +38,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         Map<String, Object> properties = (Map<String, Object>) oAuth2User.getAttributes().get("properties");
         String nickname = (String) properties.get("nickname");
-        String jwt = jwtTokenUtil.generateTokenForOAuth(user.getUsername(), email, nickname);
+        String jwt = jwtTokenUtil.generateTokenForOAuth(user.getUsername(), email, nickname, user.getRole());
 
         String url = makeRedirectUrl(jwt);
         System.out.println("url: " + url);
