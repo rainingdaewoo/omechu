@@ -1,11 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import jwt_decode  from 'jwt-decode'
 
 
 const MyPage = () => {
 
+    const [userDetail, setUserDetail] = useState({
+        id: "",
+        email: "",
+        role: ""
+    });
+
+    useEffect(() => {
+        const token = jwt_decode (localStorage.getItem("token"));
+        //console.log("teste4st", localStorage.getItem("token"));
+        axios.get(
+            "http://localhost:8080/user/" + token.id,
+            { headers: { 
+                Authorization: "Bearer " + localStorage.getItem("token"),
+                                "Content-Type": "application/json",
+                                },
+                })
+            .then( (result) => {
+                setUserDetail(result.data);
+            })
+            .catch( () => {
+                console.log("fail");
+            });
+           
+        console.log(userDetail);
+    }, []);
+
+
     return (
         <div>
-            <h1>내 정보 페이지</h1>
+            { userDetail.username }님 안녕하세요!!<br/>
+            오늘도 맛있는 한끼되세요!!
+
             
         </div>
     );

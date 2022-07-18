@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import styled from 'styled-components';
 
 const SaveForm = (props) => {
 
@@ -61,8 +62,17 @@ const SaveForm = (props) => {
                     글쓰기
                 </Button>
             </Form>
+            <박스>gdgd
+            </박스>
         </div>
     );
 };
+
+
+
+
+let 박스 = styled.div`
+  padding : 20px;
+`;
 
 export default SaveForm;

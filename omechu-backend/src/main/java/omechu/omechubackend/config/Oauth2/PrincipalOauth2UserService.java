@@ -60,12 +60,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             log.info("우리 사이트는 구글, 카카오 로그인만 지원합니다.");
         }
 
-        System.out.println("!!!!!!!!" + oAuth2userInfo.getName());
-        System.out.println("!!!!!!!!" + oAuth2userInfo.getNickName());
-        System.out.println("!!!!!!!!" + oAuth2userInfo.getEmail());
-        System.out.println("!!!!!!!!" + oAuth2userInfo.getProvider());
-        System.out.println("!!!!!!!!" + oAuth2userInfo.getProviderId());
-
         String provider   = oAuth2userInfo.getProvider();                             // google
         String providerId = oAuth2userInfo.getProviderId();                           // 숫자 ex) 12345566
         String username   = provider + "_" + providerId;                              // google_123456

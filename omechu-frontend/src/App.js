@@ -31,7 +31,6 @@ function App() {
           <Route path="*" element={<div>에러 페이지</div>}></Route>
         </Routes>
       </Container>  
-    <Footer />    
   </div>
   );
 };

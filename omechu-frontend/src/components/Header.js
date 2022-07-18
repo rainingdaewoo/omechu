@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Container, Form, FormControl, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
+    const [loginCheck, setLoginCheck] = useState("");
 
     const goMypage = () => {
 
@@ -10,15 +11,18 @@ const Header = () => {
         if (localStorage.getItem("token") === null) {
             alert("로그인 해주세요.");
             document.location.href = "/loginForm";
-          } else {
-
           };
         };
 
     useEffect(() => {
-     
-        localStorage.clear();
-        console.log(localStorage.getItem("token"));
+        if (localStorage.getItem("token") !== null) {
+            setLoginCheck(true);
+            // console.log("로그인: " + loginCheck);
+            // console.log("token: " + localStorage.getItem("token"));
+          } else {
+            setLoginCheck(false);
+            // fetchData();
+          }
         }, []);    
         
 
@@ -31,9 +35,22 @@ const Header = () => {
         <>
     <Navbar bg="dark" variant="dark">
     <Container fluid>
+
+        <a>
+            <img 
+                src="/burger_menu.png" 
+                alt="burger Menu" 
+            />
+        </a> &nbsp        
+
         <Link to="/" className="navbar-brand">
             omechu
         </Link>
+        &nbsp   &nbsp
+        &nbsp   &nbsp
+        &nbsp   &nbsp
+        &nbsp   &nbsp
+         
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
         
@@ -48,14 +65,27 @@ const Header = () => {
 
             
         </Form>
+        &nbsp   &nbsp
+        &nbsp   &nbsp
+        &nbsp   &nbsp
+        &nbsp   &nbsp
+        &nbsp   &nbsp
+        &nbsp   &nbsp
+        &nbsp   &nbsp
+        &nbsp   &nbsp   
+
         <Nav
             className="me-auto my-2 my-lg-0"
             style={{ maxHeight: '100px' }}
             navbarScroll
         >
-            <Link to="/loginForm" className="nav-link">로그인</Link>
+            { loginCheck ? 
+                (<Link to="/myPage" className="nav-link" onClick={goMypage} >내 정보</Link>) 
+                : 
+                (<Link to="/loginForm" className="nav-link">로그인</Link>)
+            }
             <Link to="/saveForm" className="nav-link">글쓰기</Link>
-            <Link to="/myPage" className="nav-link" onClick={goMypage} >내 정보</Link>
+            
         </Nav>
         </Navbar.Collapse>
     </Container>

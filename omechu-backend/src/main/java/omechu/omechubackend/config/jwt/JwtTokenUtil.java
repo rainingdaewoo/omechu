@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import omechu.omechubackend.config.auth.PrincipalDetail;
 import omechu.omechubackend.entity.RoleType;
+import omechu.omechubackend.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -54,9 +55,14 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //Jwt 생성.
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
+        claims.put("username", user.getUsername());
+        claims.put("email", user.getEmail());
+        claims.put("nickname", user.getNickname());
+        claims.put("roleType", user.getRole());
+        claims.put("id", user.getId());
+        return doGenerateToken(claims, user.getUsername());
     }
 
     public String generateToken(PrincipalDetail principalDetail) {

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import KakaoMap from '../../components/KakaoMap';
 import UserItem from '../../components/UserItem';
 
 const Home = () => {
 
     const [users, setUsers] = useState([]);
 
-    // 함수 실행 시 최초 한번 실행되는 것
+    
     useEffect(() => {
         //console.log("teste4st", localStorage.getItem("token"));
         fetch("http://localhost:8080/user", {
@@ -26,6 +27,7 @@ const Home = () => {
             {users && users.map( user => (
                 <UserItem key={user.id} user={user}/> 
             ))}
+            <KakaoMap></KakaoMap>
         </div>
     );
 };

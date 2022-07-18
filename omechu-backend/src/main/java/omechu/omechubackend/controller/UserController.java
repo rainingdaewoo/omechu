@@ -15,7 +15,6 @@ public class UserController {
 
     @GetMapping("/user")
     public ResponseEntity<?> findAllUsers(){
-        System.out.println("컨트롤러 진입 확인");
         return new ResponseEntity<>(userService.findAllUsers(), HttpStatus.OK); // 200
     }
 
