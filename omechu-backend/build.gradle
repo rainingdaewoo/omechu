@@ -35,7 +35,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
 
-
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
 	// querydsl 관련 시작
@@ -82,9 +81,4 @@ bootJar {
 		from asciidoctor.outputDir
 		into "src/main/resources/static/docs"
 	}
-	/*from ("${asciidoctor.outputDir}/html5") {
-
-		println ">>>>" + asciidoctor.outputDir
-		into 'static/docs'
-	}*/
 }

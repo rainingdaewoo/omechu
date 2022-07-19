@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Form, FormControl, Nav, Navbar } from 'react-bootstrap';
+import { Button, Container, Form, FormControl, Nav, Navbar, NavDropdown, Offcanvas } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
@@ -33,64 +33,68 @@ const Header = () => {
 
     return (
         <>
-    <Navbar bg="dark" variant="dark">
-    <Container fluid>
+          <Navbar key="false" bg="dark"  variant="dark" expand="false" className="mb-3">
+          <Container fluid>
+          
+          <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-false`} /> &nbsp;
+          <Link to="/" className="navbar-brand">
+              omechu
+          </Link>
+          &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
+          &nbsp;   &nbsp;    &nbsp;   &nbsp; &nbsp;   &nbsp; &nbsp;   &nbsp;
+          &nbsp;   &nbsp;  &nbsp;   &nbsp;  &nbsp;   &nbsp;  &nbsp;   &nbsp;
+          &nbsp;   &nbsp;  &nbsp;   &nbsp; &nbsp;   &nbsp;  &nbsp;   &nbsp;
+          
+          &nbsp;   &nbsp;
+          &nbsp;   &nbsp;
 
-        <a>
-            <img 
-                src="/burger_menu.png" 
-                alt="burger Menu" 
-            />
-        </a> &nbsp        
-
-        <Link to="/" className="navbar-brand">
-            omechu
-        </Link>
-        &nbsp   &nbsp
-        &nbsp   &nbsp
-        &nbsp   &nbsp
-        &nbsp   &nbsp
          
-        <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
-        
-        <Form className="d-flex">
-            <FormControl
-            type="search"
-            placeholder="Search"
-            className="me-2"
-            aria-label="Search"
-            />
-            <Button variant="outline-success">Search</Button>
+         
+            <Navbar.Offcanvas
+              id={`offcanvasNavbar-expand-false`}
+              aria-labelledby={`offcanvasNavbarLabel-expand-false`}
+              placement="start"
+            >
+              <Offcanvas.Header closeButton>
+                <Offcanvas.Title id={`offcanvasNavbarLabel-expand-false`}>
+                  유튜브 목록
+                </Offcanvas.Title>
+              </Offcanvas.Header>
+              <Offcanvas.Body>
+                
+                
+              </Offcanvas.Body>
+            </Navbar.Offcanvas>
 
+            <Form className="d-flex">
+                <FormControl
+                type="search"
+                placeholder="Search"
+                className="me-2"
+                aria-label="Search"
+                />
+              <Button variant="outline-success">Search</Button>
+            </Form>
+            &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
+            &nbsp;   &nbsp;    &nbsp;   &nbsp; &nbsp;   &nbsp; &nbsp;   &nbsp;
+            &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
+            &nbsp;   &nbsp;    &nbsp;   &nbsp; &nbsp;   &nbsp; &nbsp;   &nbsp;
+            &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
+            &nbsp;   &nbsp;    &nbsp;   &nbsp; &nbsp;   &nbsp; &nbsp;   &nbsp;
+            &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
+            &nbsp;   &nbsp;    &nbsp;  
+          
             
-        </Form>
-        &nbsp   &nbsp
-        &nbsp   &nbsp
-        &nbsp   &nbsp
-        &nbsp   &nbsp
-        &nbsp   &nbsp
-        &nbsp   &nbsp
-        &nbsp   &nbsp
-        &nbsp   &nbsp   
-
-        <Nav
-            className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: '100px' }}
-            navbarScroll
-        >
             { loginCheck ? 
-                (<Link to="/myPage" className="nav-link" onClick={goMypage} >내 정보</Link>) 
+                (<Link to="/myPage" className="nav-link" onClick={goMypage} style={{ color: "white" }}>내 정보</Link>) 
                 : 
-                (<Link to="/loginForm" className="nav-link">로그인</Link>)
+                (<Link to="/loginForm" className="nav-link" style={{ color: "white" }}>로그인</Link>)
             }
-            <Link to="/saveForm" className="nav-link">글쓰기</Link>
-            
-        </Nav>
-        </Navbar.Collapse>
-    </Container>
-    </Navbar>
-    <br />
+            <Link to="/saveForm" className="nav-link" style={{ color: "white" }}>영상 추가</Link>
+          
+          </Container>
+        </Navbar>
+      <br />
     </>
     );
 };

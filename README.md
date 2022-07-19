@@ -3,21 +3,22 @@
 ### 스프링부트
 
 - springboot 2.7.0
-- JPA
-- MariaDB(H2)
+- JPA(querydsl)
+- MariaDB
 - Gradle
 - Lombok
-- Security(예정)
+- Security
+- Oauth2-client
+- Spring REST Docs
 
 ### React
 
 - yarn add react-router-dom
-- //yarn add redux react-redux
 - yarn add @reduxjs/toolkit react-redux
 - yarn add react-bootstrap bootstrap
-- yarn add http-proxy-middleware
 - yarn add axios
 - yarn add jwt-decode
+- yarn add styled-components
 
 ```txt
 import 'bootstrap/dist/css/bootstrap.min.css';

@@ -22,7 +22,7 @@ const KakaoMap = () => {
     
         // 지도 생성   
         let map = new kakao.maps.Map(mapContainer, mapOption); 
-        var clickedOverlay = null;
+        
         store.forEach(store => {
 
             // 주소-좌표 변환 객체
@@ -31,7 +31,7 @@ const KakaoMap = () => {
             // 주소로 좌표 검색
             geocoder.addressSearch(store.address, function(result, status) {
                 
-            // 정상적으로 검색이 완료됐으면 
+                // 정상적으로 검색이 완료됐으면 
                 if (status === kakao.maps.services.Status.OK) {
             
                     let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
@@ -54,48 +54,39 @@ const KakaoMap = () => {
                     });
 
                     let content = '<div class="wrap">' + 
-                                    '    <div class="info">' + 
-                                    '        <div class="title">' + 
-                                                store.storeName + 
-                                    '            <button onclick="closeOverlay()" title="닫기">X</button>' + 
-                                    '        </div>' + 
-                                    '        <div class="body">' + 
-                                    '            <div class="desc">' + 
-                                    '                <div class="ellipsis">' + store.address + '</div>' + 
-                                    '                <div><a href=' + store.storeNaverUrl  + 'target="_blank" class="link">네이버 페이지</a></div>' + 
-                                    '            </div>' + 
-                                    '        </div>' + 
-                                    '    </div>' +    
-                                    '</div>';
-                                         
+                                '    <div class="info">' + 
+                                '        <div class="title">' + 
+                                            store.storeName + 
+                                '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
+                                '        </div>' + 
+                                '        <div class="body">' + 
+                                '            <div class="img">' +
+                                '                <img src="https://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
+                                '           </div>' + 
+                                '            <div class="desc">' + 
+                                '                <div class="ellipsis">' + store.address + '</div>' + 
+                                '                <div><a href=' + store.storeNaverUrl  + 'target="_blank" class="link">네이버 페이지</a></div>' + 
+                                '            </div>' + 
+                                '        </div>' + 
+                                '    </div>' +    
+                                '</div>';
                     
-
-                    // kakao.maps.event.addListener(marker, 'click', function() {
-                    //     console.log(store);
-                    // });
-                    
+                    let overlay = new kakao.maps.CustomOverlay({
+                        content: content,
+                        map: map,
+                        position: marker.getPosition()       
+                    });
+                                
+                    // 마커 클릭 시 커스텀 오버레이 표시
                     kakao.maps.event.addListener(marker, 'click', function() {
+                        overlay.setMap(map);
+                    });                      
 
-                        var CustomOverlay  = new kakao.maps.CustomOverlay({
-                            content: content,
-                            map: map,
-                            position: marker.getPosition()       
-                       });
-
-                        if (clickedOverlay) {
-                            clickedOverlay.setMap(null);
-                        }
-                        CustomOverlay.setMap(map);
-                        clickedOverlay = CustomOverlay;
-                      });
-
-                     // 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
+                    // 커스텀 오버레이 닫기 함수
                     function closeOverlay() {
-                        clickedOverlay.setMap(null);     
-                    } 
+                        overlay.setMap(null);     
+                    }
                 }
-
-               
             });
         });
     
@@ -103,9 +94,7 @@ const KakaoMap = () => {
 
     return (
         <>
-        <div class="close"  title="닫기"></div>
             <StoredMap id="map" />
-            
         </>
     );
 }
