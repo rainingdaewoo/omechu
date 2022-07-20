@@ -2,7 +2,6 @@ import React from 'react';
 import { Container } from 'react-bootstrap';
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
-import SaveForm from './pages/book/SaveForm';
 import Home from './pages/book/Home';
 import UpdateForm from './pages/book/UpdateForm';
 import LoginForm from './pages/user/LoginForm';
@@ -10,6 +9,7 @@ import KakaoLoginRedirect from './pages/user/KakaoLoginRedirect';
 import Footer from './components/Footer';
 import MyPage from './pages/user/MyPage';
 import KakaoMap from './components/KakaoMap';
+import WriteFromKakaoMap from './pages/book/WriteFromKakaoMap';
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
      <Container>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/saveForm" element={<SaveForm />} />
+          <Route path="/writeFromKakaoMap" element={<WriteFromKakaoMap />} />
           <Route path="/loginForm" element={<LoginForm />} />
           <Route path="/updateForm/:id" element={<UpdateForm />} />
           <Route path="/kakao" element={<KakaoMap />} />

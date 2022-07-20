@@ -1,29 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Form, FormControl, Nav, Navbar, NavDropdown, Offcanvas } from 'react-bootstrap';
+import { Button, Container, Dropdown, DropdownButton, Form, FormControl, Nav, Navbar, NavDropdown, Offcanvas } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+const CATEGORY = [
+  { id: null, value: '카테고리' },
+  { id: '0001', value: '한식' },
+  { id: '0002', value: '중식' },
+  { id: '0003', value: '일식' },
+];
+
 const Header = () => {
-    const [loginCheck, setLoginCheck] = useState("");
+  const [loginCheck, setLoginCheck] = useState('');
+  const [searchCategory, setSearchCategory] = useState('카테고리');
 
-    const goMypage = () => {
+  
+  const handleDropCategory = e => {  // onChange 이벤트가 발생한 target을 받아와 value값 할당
+    const { value } = e.target;
+    console.log(value);
+    setSearchCategory(CATEGORY.filter(el => el.value === value)[0].id);     // 카테고리에 넣을 데이터
+  };
 
-        // 토큰이 없거나 토큰 유효기간이 만료되었을 때는 로그인 화면으로 이동
-        if (localStorage.getItem("token") === null) {
-            alert("로그인 해주세요.");
-            document.location.href = "/loginForm";
-          };
-        };
+  const goMypage = () => {
+    // 토큰이 없거나 토큰 유효기간이 만료되었을 때는 로그인 화면으로 이동
+    if (localStorage.getItem("token") === null) {
+      alert("로그인 해주세요.");
+      document.location.href = "/loginForm";
+      };
+    };
 
-    useEffect(() => {
-        if (localStorage.getItem("token") !== null) {
+    
+
+  useEffect(() => {
+
+    console.log();
+    if (localStorage.getItem("token") !== null) {
             setLoginCheck(true);
-            // console.log("로그인: " + loginCheck);
-            // console.log("token: " + localStorage.getItem("token"));
-          } else {
-            setLoginCheck(false);
-            // fetchData();
-          }
-        }, []);    
+        } else {
+          setLoginCheck(false);
+        }
+      }, []);    
         
 
 
@@ -31,24 +46,16 @@ const Header = () => {
 
 
 
-    return (
-        <>
-          <Navbar key="false" bg="dark"  variant="dark" expand="false" className="mb-3">
-          <Container fluid>
-          
-          <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-false`} /> &nbsp;
+  return (
+    <>
+    <Navbar key="false" bg="dark"  variant="dark" expand="false" className="mb-3">
+      <Container fluid>      
+        <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-false`} /> 
           <Link to="/" className="navbar-brand">
               omechu
           </Link>
           &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
           &nbsp;   &nbsp;    &nbsp;   &nbsp; &nbsp;   &nbsp; &nbsp;   &nbsp;
-          &nbsp;   &nbsp;  &nbsp;   &nbsp;  &nbsp;   &nbsp;  &nbsp;   &nbsp;
-          &nbsp;   &nbsp;  &nbsp;   &nbsp; &nbsp;   &nbsp;  &nbsp;   &nbsp;
-          
-          &nbsp;   &nbsp;
-          &nbsp;   &nbsp;
-
-         
          
             <Navbar.Offcanvas
               id={`offcanvasNavbar-expand-false`}
@@ -65,32 +72,40 @@ const Header = () => {
                 
               </Offcanvas.Body>
             </Navbar.Offcanvas>
+              <Form className="d-flex">
 
-            <Form className="d-flex">
+                <select
+                  className="me-1"
+                  variant="outline-secondary"
+                  title={searchCategory}
+                  id="input-group-dropdown-1"
+                  onChange={handleDropCategory}
+                >
+                  {CATEGORY.map(el => {
+                    return <option key={el.id}>{el.value}</option>;
+                  })}
+                </select>
+
                 <FormControl
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
+                  type="search"
+                  placeholder="Search"
+                  className="me-2"
+                  aria-label="Search"
+                  aria-describedby="inputGroup-sizing-default"
                 />
-              <Button variant="outline-success">Search</Button>
-            </Form>
+
+                <Button variant="outline-success">Search</Button>
+
+              </Form>
             &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
             &nbsp;   &nbsp;    &nbsp;   &nbsp; &nbsp;   &nbsp; &nbsp;   &nbsp;
-            &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
-            &nbsp;   &nbsp;    &nbsp;   &nbsp; &nbsp;   &nbsp; &nbsp;   &nbsp;
-            &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
-            &nbsp;   &nbsp;    &nbsp;   &nbsp; &nbsp;   &nbsp; &nbsp;   &nbsp;
-            &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
-            &nbsp;   &nbsp;    &nbsp;  
-          
             
             { loginCheck ? 
                 (<Link to="/myPage" className="nav-link" onClick={goMypage} style={{ color: "white" }}>내 정보</Link>) 
                 : 
                 (<Link to="/loginForm" className="nav-link" style={{ color: "white" }}>로그인</Link>)
             }
-            <Link to="/saveForm" className="nav-link" style={{ color: "white" }}>영상 추가</Link>
+            <Link to="/writeFromKakaoMap" className="nav-link" style={{ color: "white" }}>맛집 추가</Link>
           
           </Container>
         </Navbar>

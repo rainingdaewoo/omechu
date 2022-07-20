@@ -19,6 +19,7 @@
 - yarn add axios
 - yarn add jwt-decode
 - yarn add styled-components
+- yarn add react-daum-postcode
 
 ```txt
 import 'bootstrap/dist/css/bootstrap.min.css';
