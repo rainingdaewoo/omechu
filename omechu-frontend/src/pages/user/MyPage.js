@@ -24,11 +24,15 @@ const MyPage = () => {
             .then( (result) => {
                 setUserDetail(result.data);
             })
-            .catch( () => {
+            .catch( (error) => {
                 console.log("fail");
+                if( error.response.status === 401 ) {
+                    localStorage.clear();
+                    window.location.replace("/");
+                } 
             });
            
-        console.log(userDetail);
+        console.log(userDetail); 
     }, []);
 
 

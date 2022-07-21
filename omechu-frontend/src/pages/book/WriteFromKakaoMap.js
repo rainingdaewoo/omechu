@@ -1,38 +1,67 @@
-import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Button, FloatingLabel, Form } from 'react-bootstrap';
 import DaumPostcode from 'react-daum-postcode';
+import styled from 'styled-components';
+
 
 const WriteFromKakaoMap = (props) => {
 
-    const [boardFromYoutube, setBoardFromYoutube] = useState({
+    let [boardFromYoutube, setBoardFromYoutube] = useState({
         storeName: "",
         youtubeLink: "",
-        storeAddress: ""
+        storeAddress: "",
+        youTuber: "",
     });
-    const [storeAddress, setStoreAddress] = useState();
+    const [kakaoAddress, setKakaoAddress] = useState('');
 
     const changeValue = (e) => {
+        // setBoardFromYoutube({
+        //     ...boardFromYoutube,
+        //     [e.target.name]: e.target.value,
+        //     storeAddress: kakaoAddress,
+        // });
+        const {name, value} = e.target;
         setBoardFromYoutube({
             ...boardFromYoutube,
-            [e.target.name]: e.target.value
-        });
+            [name]: value
+        })    
 
     }
 
     const submitContent = (e) => {
         e.preventDefault(); //submit이 action을 안 타고 자기 할일을 그만함.
+        setBoardFromYoutube({
+            ...boardFromYoutube,
+            storeAddress: kakaoAddress
+        });
         console.log(boardFromYoutube);
+        axios.post("http://localhost:8080/youtubeContent/", JSON.stringify(boardFromYoutube), { 
+            headers: { 
+                Authorization: "Bearer " + localStorage.getItem("token"),
+                "Content-Type": "application/json",
+            },
+            })
+                .then( (result) => {
+                    console.log(result);
+                    window.location.href = "/";
+                })
+                .catch( (error) => {
+                    console.log(error);
+                    if( error.response.data.message === "잘못된 요청입니다."){
+                        alert("필수 값이 빠졌습니다. 다시 확인해주세요.");
+                    }
+                });;
     }
+    
+    const handle = (data) => {
+        setKakaoAddress(data.address);
+    };
 
-    const handle = {
-        // 주소 선택 이벤트
-        selectAddress: (data) => {
-            console.log(`
-                주소: ${data.address},
-            `)
-            setStoreAddress(data.address);
-        },
-    }
+
+    useEffect(() => {
+        
+    }, []);
 
     return (
         <div>
@@ -43,20 +72,32 @@ const WriteFromKakaoMap = (props) => {
                     <Form.Control  type="text" placeholder="가게 이름을 적어주세요" onChange={changeValue} name="storeName" />
                 </Form.Group>
 
+                <FloatingLabel controlId="selectYoutuber" label="유튜버">
+                    <Form.Select onChange={changeValue} name="youTuber" aria-label="Floating label select">
+                        <option value=''>어떤 유튜버인가요?</option>
+                        <option value='성시경 SUNG SI KYUNG'>성시경 SUNG SI KYUNG</option>
+                        <option value='먹보스 쭈엽이'>먹보스 쭈엽이</option>
+                        <option value='김사원세끼'>김사원세끼</option>
+                    </Form.Select>
+                </FloatingLabel>
+                <br />
                 <Form.Group className="mb-3">
                     <Form.Label>영상 링크</Form.Label>
                     <Form.Control  type="text" placeholder="유튜브 링크(ex, https://www.youtube.com/watch?...)" onChange={changeValue} name="youtubeLink"/>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                    <Form.Label>영상 링크</Form.Label>
-                    <Form.Control type="text" placeholder="가게 주소" onChange={changeValue} name="storeAddress"  value={storeAddress} disabled/>
+                    <Form.Label>가게 주소(아래에서 주소를 검색해주세요.)</Form.Label>
+                    <Form.Control type="text" placeholder="가게 주소" onChange={changeValue} name="storeAddress" value={kakaoAddress || ""}/>
                 </Form.Group>
 
+                ======================================================================
+                <Div>
                 <DaumPostcode 
-                    onComplete={handle.selectAddress}       // 값을 선택할 경우 실행되는 이벤트
-                    autoClose={false}                       // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+                    onComplete={handle}       // 값 선택 시 실행되는 이벤트
+                    autoClose={false}                       // 값 선택 시 자동 닫힘 설정
                 />
+                </Div>
 
                 <Button variant="primary" type="submit">
                     등록
@@ -66,5 +107,9 @@ const WriteFromKakaoMap = (props) => {
         </div>
     );
 };
+
+const Div = styled.div`
+   border:1px solid silver;
+`;
 // 게시판 영상 제목, 영상 URL, 유튜버, 가게 이름, 가게 URL
 export default WriteFromKakaoMap;

@@ -1,5 +1,6 @@
 package omechu.omechubackend.controller;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import omechu.omechubackend.exception.InvalidRequest;
 import omechu.omechubackend.exception.OmechuException;
@@ -44,6 +45,26 @@ public class ExceptionController {
         for (FieldError fieldError : e.getFieldErrors() ) {
             response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
         }
+
+        return response;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ExpiredJwtException.class)
+    @ResponseBody
+    public ErrorResponse expiredJwtExceptionHandler(ExpiredJwtException e) {
+        Map<String, String> validationInitialValue = new HashMap<>();
+        // MethodArgumentNotValidException
+        ErrorResponse response = ErrorResponse.builder()
+                .code("400")
+                .message("잘못된 요청입니다.")
+                .validation(validationInitialValue)
+                .build();
+
+
+       /* for (FieldError fieldError : e.getFieldErrors() ) {
+            response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
+        }*/
 
         return response;
     }

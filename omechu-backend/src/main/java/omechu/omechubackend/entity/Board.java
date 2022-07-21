@@ -13,4 +13,5 @@ public class Board {
     private Long id;
 
     private int hit;
+    // YoutubeContentBoard
 }
