@@ -3,12 +3,38 @@
 import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
 import data from "../data/data.js"
+import axios from 'axios';
 
 const { kakao } = window;
 
 const KakaoMap = () => {
 
     let [store] = useState(data);
+    const [youtubeContent, setYoutubeContent] = useState({
+        storeName : "",
+        address : "",
+        storeNaverUrl : "", 
+        youtubeUrl : ""
+    }); 
+    
+    useEffect(() => {
+        
+        axios.get(
+          "http://localhost:8080/youtubeContent/",        
+          { headers: { 
+            Authorization: "Bearer " + localStorage.getItem("token"),
+                            "Content-Type": "application/json",
+                            },
+            })
+        .then( (result) => {
+            console.log(result.data);
+        })
+        .catch( (error) => {
+            console.log("fail");
+            console.log( error );
+        });
+    
+          }, []); 
 
     useEffect(() => {
 

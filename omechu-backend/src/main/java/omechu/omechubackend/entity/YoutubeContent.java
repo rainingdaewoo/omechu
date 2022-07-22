@@ -1,10 +1,13 @@
 package omechu.omechubackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
+import lombok.Getter;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 public class YoutubeContent {
 
     @Id
@@ -18,7 +21,7 @@ public class YoutubeContent {
 
     private String youtuber;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "store_id")
     private Store store;
 

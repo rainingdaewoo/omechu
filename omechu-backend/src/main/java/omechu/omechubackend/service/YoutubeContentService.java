@@ -4,24 +4,28 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import omechu.omechubackend.entity.Store;
 import omechu.omechubackend.entity.YoutubeContent;
-import omechu.omechubackend.repository.PostYoutubeContentRepository;
+import omechu.omechubackend.exception.PostNotFound;
+import omechu.omechubackend.repository.YoutubeContentRepository;
 import omechu.omechubackend.repository.StoreRepository;
 import omechu.omechubackend.request.PostYoutubeContentCreate;
+import omechu.omechubackend.response.PostResponse;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class PostYoutubeContentService {
+public class YoutubeContentService {
 
-    private final PostYoutubeContentRepository postYoutubeContentRepository ;
+    private final YoutubeContentRepository youtubeContentRepository ;
     private final StoreRepository storeRepository ;
 
     /**
      * 유튜브 영상 맛집 작성
      * @param request
      */
-    public void writeYoutubeContent(PostYoutubeContentCreate request) {
+    public YoutubeContent writeYoutubeContent(PostYoutubeContentCreate request) {
 
         Store store = Store.builder()
                 .storeName(request.getStoreName())
@@ -50,9 +54,21 @@ public class PostYoutubeContentService {
                 .URL(request.getYoutubeURL())
                 .youtuber(request.getYouTuber())
                 .store(store)
-               .imageURL(imageURL)
+                .imageURL(imageURL)
                 .build();
 
-        postYoutubeContentRepository.save(youtubeContent);
+        return youtubeContentRepository.save(youtubeContent);
     }
+
+    /**
+     * 게시글 전체 불러오기
+     * @return
+     */
+    public List<Store> getAllYoutubeContent() {
+        System.out.println("getAllYoutubeContent" + youtubeContentRepository.findAll());
+       // return youtubeContentRepository.findAll();
+        return storeRepository.findAll();
+    }
+
+
 }

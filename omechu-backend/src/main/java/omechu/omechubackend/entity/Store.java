@@ -1,13 +1,15 @@
 package omechu.omechubackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
+import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Getter
 public class Store {
 
     @Id @GeneratedValue
@@ -21,6 +23,9 @@ public class Store {
     private String storeNaverURL;
 
     private String phone;
+
+    @OneToMany(mappedBy = "store")
+    List<YoutubeContent> youtubeContents = new ArrayList<>();
 
     public Store() {
 

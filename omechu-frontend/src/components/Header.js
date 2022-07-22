@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Form, FormControl, Navbar, Offcanvas } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const CATEGORY = [
   { id: null, value: '카테고리' },
@@ -16,7 +17,6 @@ const Header = () => {
   
   const handleDropCategory = e => {  // onChange 이벤트가 발생한 target을 받아와 value값 할당
     const { value } = e.target;
-    console.log(value);
     setSearchCategory(CATEGORY.filter(el => el.value === value)[0].id);     // 카테고리에 넣을 데이터
   };
 
@@ -31,10 +31,8 @@ const Header = () => {
     
 
   useEffect(() => {
-
-    console.log();
     if (localStorage.getItem("token") !== null) {
-            setLoginCheck(true);
+          setLoginCheck(true);
         } else {
           setLoginCheck(false);
         }
@@ -56,11 +54,13 @@ const Header = () => {
           </Link>
           &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
           &nbsp;   &nbsp;    &nbsp;   &nbsp; &nbsp;   &nbsp; &nbsp;   &nbsp;
-         
+
             <Navbar.Offcanvas
               id={`offcanvasNavbar-expand-false`}
               aria-labelledby={`offcanvasNavbarLabel-expand-false`}
               placement="start"
+              scroll = {true}
+              backdrop= {false}
             >
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id={`offcanvasNavbarLabel-expand-false`}>
@@ -73,13 +73,13 @@ const Header = () => {
               </Offcanvas.Body>
             </Navbar.Offcanvas>
               <Form className="d-flex">
-
                 <select
                   className="me-1"
                   variant="outline-secondary"
                   title={searchCategory}
                   id="input-group-dropdown-1"
                   onChange={handleDropCategory}
+                  style={{ width: 110, padding: 3 }}
                 >
                   {CATEGORY.map(el => {
                     return <option key={el.id}>{el.value}</option>;
@@ -92,6 +92,7 @@ const Header = () => {
                   className="me-2"
                   aria-label="Search"
                   aria-describedby="inputGroup-sizing-default"
+                  style={{ width: 500, padding: 3 }}
                 />
 
                 <Button variant="outline-success">Search</Button>
@@ -99,6 +100,8 @@ const Header = () => {
               </Form>
             &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
             &nbsp;   &nbsp;    &nbsp;   &nbsp; &nbsp;   &nbsp; &nbsp;   &nbsp;
+            &nbsp;   &nbsp;    &nbsp;   &nbsp; &nbsp;   &nbsp; &nbsp;   &nbsp;
+            
             
             { loginCheck ? 
                 (<Link to="/myPage" className="nav-link" onClick={goMypage} style={{ color: "white" }}>내 정보</Link>) 
