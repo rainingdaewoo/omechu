@@ -19,7 +19,7 @@ import java.util.List;
 public class YoutubeContentService {
 
     private final YoutubeContentRepository youtubeContentRepository ;
-    private final StoreRepository storeRepository ;
+    private final StoreRepository storeRepository;
 
     /**
      * 유튜브 영상 맛집 작성
@@ -67,6 +67,7 @@ public class YoutubeContentService {
     public List<Store> getAllYoutubeContent() {
         System.out.println("getAllYoutubeContent" + youtubeContentRepository.findAll());
        // return youtubeContentRepository.findAll();
+
         return storeRepository.findAll();
     }
 

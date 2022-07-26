@@ -9,25 +9,42 @@ const { kakao } = window;
 
 const KakaoMap = () => {
 
-    let [store] = useState(data);
-    const [youtubeContent, setYoutubeContent] = useState({
-        storeName : "",
+    const [store, setStore] = useState(data);
+    const [store2, setStore2] = useState([{
         address : "",
+        storeName : "",
         storeNaverUrl : "", 
-        youtubeUrl : ""
-    }); 
+        imageURL: "",
+        url: ""
+    }]); 
+
+    const [books, setBooks] = useState([]);
     
     useEffect(() => {
         
         axios.get(
           "http://localhost:8080/youtubeContent/",        
           { headers: { 
-            Authorization: "Bearer " + localStorage.getItem("token"),
                             "Content-Type": "application/json",
                             },
             })
         .then( (result) => {
-            console.log(result.data);
+            // (result.data).map((data, idx) => {
+            //     const aaa = {
+            //         address: result.data[idx].address,
+            //         storeName: result.data[idx].storeName,
+            //         storeNaverUrl: result.data[idx].storeNaverURL,
+            //         imageURL: result.data[idx].youtubeContents[0].imageURL,
+            //         url: result.data[idx].youtubeContents[0].url    
+            //         };
+            //     console.log(aaa);
+            //     console.log(idx);
+            //     }
+            
+            // );
+            
+            setBooks(result.data);
+            console.log(books);     
         })
         .catch( (error) => {
             console.log("fail");
@@ -56,8 +73,8 @@ const KakaoMap = () => {
 
         
         var clickedOverlay = null;
-        store.forEach(store => {
-
+        books.forEach(store => {
+            console.log(store.youtubeContents[0].url);
             // 주소-좌표 변환 객체
             let geocoder = new kakao.maps.services.Geocoder();
 
@@ -92,6 +109,9 @@ const KakaoMap = () => {
                                     '        </div>' + 
                                     '        <div class="body">' + 
                                     '            <div class="desc">' + 
+                                    '                <a href=' + store.youtubeContents[0].url  + '> ' +
+                                    '                <img src=' +store.youtubeContents[0].imageURL +  ' />' +
+                                    '                </a>' +
                                     '                <div class="ellipsis">' + store.address + '</div>' + 
                                     '                <div><a href=' + store.storeNaverUrl  + ' target="_blank" class="link">네이버 페이지</a></div>' + 
                                     '            </div>' + 
@@ -128,7 +148,7 @@ const KakaoMap = () => {
             });
         });
     
-    }, []);
+    }, [books]);
 
     return (
         <>

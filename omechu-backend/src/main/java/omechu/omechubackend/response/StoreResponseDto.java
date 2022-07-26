@@ -1,5 +1,6 @@
 package omechu.omechubackend.response;
 
+import lombok.Builder;
 import lombok.Getter;
 import omechu.omechubackend.entity.Store;
 
@@ -9,15 +10,12 @@ import java.util.stream.Collectors;
 @Getter
 public class StoreResponseDto {
 
-    private Long id;
-    private String storeName;
-    private String address;
-    private String storeNaverURL;
-    private String phone;
-    private List<YoutubeContentResponseDto> youtubeContents;
-
-    public StoreResponseDto() {
-    }
+    private final Long id;
+    private final String storeName;
+    private final String address;
+    private final String storeNaverURL;
+    private final String phone;
+    private final List<YoutubeContentResponseDto> youtubeContents;
 
     public StoreResponseDto(Store store) {
         this.id = store.getId();
@@ -25,7 +23,7 @@ public class StoreResponseDto {
         this.address = store.getAddress();
         this.storeNaverURL = store.getStoreNaverURL();
         this.phone = store.getPhone();
-        this.youtubeContents =store.getYoutubeContents().stream().map(YoutubeContentResponseDto::new).collect(Collectors.toList());
+        this.youtubeContents =store.getYoutubeContents().stream().map(youtubeContent -> new YoutubeContentResponseDto(youtubeContent)).collect(Collectors.toList());
     }
 
 

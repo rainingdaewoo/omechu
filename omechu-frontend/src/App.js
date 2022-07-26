@@ -6,7 +6,6 @@ import Home from './pages/book/Home';
 import UpdateForm from './pages/book/UpdateForm';
 import LoginForm from './pages/user/LoginForm';
 import KakaoLoginRedirect from './pages/user/KakaoLoginRedirect';
-import Footer from './components/Footer';
 import MyPage from './pages/user/MyPage';
 import KakaoMap from './components/KakaoMap';
 import WriteFromKakaoMap from './pages/book/WriteFromKakaoMap';

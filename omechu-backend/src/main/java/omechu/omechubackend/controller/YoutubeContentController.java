@@ -3,6 +3,7 @@ package omechu.omechubackend.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import omechu.omechubackend.request.PostYoutubeContentCreate;
+import omechu.omechubackend.service.StoreService;
 import omechu.omechubackend.service.YoutubeContentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 public class YoutubeContentController {
 
     private final YoutubeContentService youtubeContentService;
+    private final StoreService storeService;
 
     @PostMapping("/youtubeContent")
     public ResponseEntity<?> postYoutubeContent(@RequestBody @Valid PostYoutubeContentCreate request){
@@ -28,7 +30,7 @@ public class YoutubeContentController {
     @GetMapping("/youtubeContent")
     public ResponseEntity<?> getAllYoutubeContent() {
 
-        return new ResponseEntity<>(youtubeContentService.getAllYoutubeContent(), HttpStatus.OK); // 200
+        return new ResponseEntity<>(storeService.getAllYoutubeContent(), HttpStatus.OK); // 200
     }
 
 }
