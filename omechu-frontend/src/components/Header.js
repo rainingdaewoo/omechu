@@ -1,7 +1,9 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Form, FormControl, Navbar, Offcanvas } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import youtuberData from '../data/youtuberData';
 
 const CATEGORY = [
   { id: null, value: '카테고리' },
@@ -13,6 +15,7 @@ const CATEGORY = [
 const Header = () => {
   const [loginCheck, setLoginCheck] = useState('');
   const [searchCategory, setSearchCategory] = useState('카테고리');
+  const [stores, setStores] = useState([]);
 
   
   const handleDropCategory = e => {  // onChange 이벤트가 발생한 target을 받아와 value값 할당
@@ -28,6 +31,10 @@ const Header = () => {
       };
     };
 
+  const search = (e) => {
+    console.log("체크체큰");
+  }  
+
     
 
   useEffect(() => {
@@ -36,6 +43,20 @@ const Header = () => {
         } else {
           setLoginCheck(false);
         }
+
+        axios.get(
+          "http://localhost:8080/youtubeContent/",        
+          { headers: { 
+                            "Content-Type": "application/json",
+                            },
+            })
+        .then( (result) => {
+          setStores(result.data);
+        })
+        .catch( (error) => {
+            console.log("fail");
+            console.log( error );
+        });    
       }, []);    
         
 
@@ -54,6 +75,7 @@ const Header = () => {
           </Link>
           &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;
           &nbsp;   &nbsp;    &nbsp;   &nbsp; &nbsp;   &nbsp; &nbsp;   &nbsp;
+          &nbsp; &nbsp;   &nbsp;  &nbsp; &nbsp;   &nbsp;  &nbsp; &nbsp;   &nbsp;
 
             <Navbar.Offcanvas
               id={`offcanvasNavbar-expand-false`}
@@ -64,11 +86,26 @@ const Header = () => {
             >
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id={`offcanvasNavbarLabel-expand-false`}>
-                  유튜브 목록
+                  유튜버 목록
                 </Offcanvas.Title>
               </Offcanvas.Header>
               <Offcanvas.Body>
+                {youtuberData.map((youtuberData, idx) => {
+                  return (
+                  <ul>
+                    <li key={youtuberData.id}>
+                      <a>
+                        <img 
+                          style={{ height: 24, width: 24 }} 
+                          src= {youtuberData.profileImgUrl} 
+                        />
+                        {youtuberData.youtuber}
+                      </a>
+                    </li>
+                  </ul>);
+                })
                 
+                }
                 
               </Offcanvas.Body>
             </Navbar.Offcanvas>
@@ -95,7 +132,7 @@ const Header = () => {
                   style={{ width: 500, padding: 3 }}
                 />
 
-                <Button variant="outline-success">Search</Button>
+                <Button variant="outline-success" onClick={search}>Search</Button>
 
               </Form>
             &nbsp;   &nbsp;   &nbsp;   &nbsp;&nbsp;   &nbsp; &nbsp;   &nbsp;

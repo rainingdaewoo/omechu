@@ -2,23 +2,13 @@
 // [[React] 함수형 컴포넌트에서 카카오 지도 API 사용하기], https://gingerkang.tistory.com/65 참고하여 작성
 import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
-import data from "../data/data.js"
 import axios from 'axios';
 
 const { kakao } = window;
 
 const KakaoMap = () => {
 
-    const [store, setStore] = useState(data);
-    const [store2, setStore2] = useState([{
-        address : "",
-        storeName : "",
-        storeNaverUrl : "", 
-        imageURL: "",
-        url: ""
-    }]); 
-
-    const [books, setBooks] = useState([]);
+    const [stores, setStores] = useState([]);
     
     useEffect(() => {
         
@@ -29,22 +19,7 @@ const KakaoMap = () => {
                             },
             })
         .then( (result) => {
-            // (result.data).map((data, idx) => {
-            //     const aaa = {
-            //         address: result.data[idx].address,
-            //         storeName: result.data[idx].storeName,
-            //         storeNaverUrl: result.data[idx].storeNaverURL,
-            //         imageURL: result.data[idx].youtubeContents[0].imageURL,
-            //         url: result.data[idx].youtubeContents[0].url    
-            //         };
-            //     console.log(aaa);
-            //     console.log(idx);
-            //     }
-            
-            // );
-            
-            setBooks(result.data);
-            console.log(books);     
+            setStores(result.data);
         })
         .catch( (error) => {
             console.log("fail");
@@ -73,8 +48,7 @@ const KakaoMap = () => {
 
         
         var clickedOverlay = null;
-        books.forEach(store => {
-            console.log(store.youtubeContents[0].url);
+        stores.forEach(store => {
             // 주소-좌표 변환 객체
             let geocoder = new kakao.maps.services.Geocoder();
 
@@ -101,19 +75,23 @@ const KakaoMap = () => {
                     
                     // content 부분에는 string 타입만을 받기 때문에 컴포넌트가 들어갈 수 없음. 
                     // 따라서 번거롭지만 다음과 같이 커스텀 오버레이를 작성해야함.
-                    let content = '<div class="wrap" style="padding:0 5px;background:#fff;>' + 
+                    let content = '<div class="wrap" style="padding:0 5px;background:#fff; width:250px; height:200px;>' + 
                                     '    <div class="info">' + 
-                                    '        <div class="title">' + 
-                                                store.storeName + 
-                                    '            <button onclick="closeOverlay()" title="닫기">X</button>' + 
-                                    '        </div>' + 
+                                    
+                                                
+                                   
                                     '        <div class="body">' + 
                                     '            <div class="desc">' + 
                                     '                <a href=' + store.youtubeContents[0].url  + '> ' +
-                                    '                <img src=' +store.youtubeContents[0].imageURL +  ' />' +
+                                    '                   <img style="width:220px; height:130px;" src=' +store.youtubeContents[0].imageURL +  ' />' +
                                     '                </a>' +
+                                    '                <br /> ' +
+                                                    store.storeName + 
+                                    '            <a href="' + store.storeNaverURL  + '" target="_blank" class="link">' +
+                                    '               <img src="/btnG_아이콘사각.png" style="width:24px; height:24px;" />' +
+                                    '            </a>' +
                                     '                <div class="ellipsis">' + store.address + '</div>' + 
-                                    '                <div><a href=' + store.storeNaverUrl  + ' target="_blank" class="link">네이버 페이지</a></div>' + 
+                                   
                                     '            </div>' + 
                                     '        </div>' + 
                                     '    </div>' +    
@@ -127,7 +105,7 @@ const KakaoMap = () => {
                             clickable : true,               // 커스텀 오버레이 클릭 시 지도에 이벤트를 전파하지 않도록 설정
                             position: marker.getPosition(), // 커스텀 오버레이를 표시할 좌표
                             xAnchor: 0.5,                   // 컨텐츠의 x 위치
-                            yAnchor: 1.5                    // 컨텐츠의 y 위치       
+                            yAnchor: 1.3                    // 컨텐츠의 y 위치       
                        });
 
                         if (clickedOverlay) {
@@ -148,7 +126,7 @@ const KakaoMap = () => {
             });
         });
     
-    }, [books]);
+    }, [stores]);
 
     return (
         <>
